@@ -1,4 +1,3 @@
-#include <bits/stdc++.h>
 #include "Bitmask.h"
 
 using namespace std;
