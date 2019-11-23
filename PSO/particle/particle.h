@@ -24,7 +24,7 @@ public:
     : dimensions(p.size()), position(p), velocity(v), bestPos(p), lowerBoundaries(lb), upperBoundaries(ub)
     {}
 
-    void move(int time, double omega, Particle gBest);
+    void move(double omega, Particle gBest);
 
     void updateBestPos(){
         bestPos = position;
