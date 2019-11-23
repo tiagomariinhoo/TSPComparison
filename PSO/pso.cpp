@@ -1,12 +1,12 @@
 #include "./particle/particle.h"
 #include "./random/random_engine.h"
 #include <stdbool.h>
-#include <exception>
 #include <iostream>
+#include <functional>
 
 #define MAX_ITER 1000
-#define SWARM_SIZE 5
-#define DIMENSIONS 2
+
+typedef std::function<double(std::vector<double>)> Function;
 
 double omega(int t){ // Omega changes linearly during the execution
     double currentOffset = (double) t/MAX_ITER;
@@ -14,22 +14,15 @@ double omega(int t){ // Omega changes linearly during the execution
     //return 0.9 - (0.9 - 0.5)*currentOffset; //decreasing inertia weight
 }
 
-double fitness(std::vector<double> pos){ //TODO: edit this fitness function to solve TSP
-    double x = pos[0];
-    double y = pos[1];
-    return (1-x)*(1-x) + 100*(y - x*x)*(y - x*x);
-}
-
 std::vector<Particle> swarm;
-std::vector<double> lb(DIMENSIONS, -100), ub(DIMENSIONS, 100);
 Particle gBest;
-static bool initialized = false;
 
-void init(){
-    for(int i = 0; i < SWARM_SIZE; ++i) {
+Particle particleSwarm(int dimensions, int swarmSize, Function fitness, std::vector<double> lb, std::vector<double> ub){
+    // Initialize swarm with random positions and velocities and set initial global best particle
+    for(int i = 0; i < swarmSize; ++i) {
         std::vector<double> pos;
         std::vector<double> vel;
-        for(int j = 0; j < DIMENSIONS; ++j) {
+        for(int j = 0; j < dimensions; ++j) {
             pos.push_back(uniformRandom(0, 1));
             vel.push_back(uniformRandom(0, 1));
         }
@@ -39,20 +32,20 @@ void init(){
         }
         swarm.push_back(p);
     }
-    initialized = true;
-}
-
-void run(){
-    if(!initialized){
-        init();
-    }
+    
+    // Variables used to limit meaningless iterations (stop if gBest didn't change in 3 iterations)
     int didntUpdate = 0;
     bool updated = true;
-    for(int i = 0; i < MAX_ITER && didntUpdate < 2; ++i){
+    for(int i = 0; i < MAX_ITER && didntUpdate < 1000; ++i){
         for(auto p : swarm){
+            // Update Velocity and Position according to the PSO algorithm
             p.move(i, omega(i), gBest);
+
+            // Update local best position for particle p according to fitness
             if(fitness(p.getPos()) < fitness(p.getBestPos())){
                 p.updateBestPos();
+                
+                // Update global best position if current position of p is better than that
                 if(fitness(p.getPos()) < fitness(gBest.getPos())){
                     gBest = p;
                     updated = true;
@@ -64,4 +57,5 @@ void run(){
         updated = false;
         std::cout << "Iteration: "  << i+1 << ", Best Fitness: " << fitness(gBest.getPos()) << ", Omega: " << omega(i) << std::endl;
     }
+    return gBest;
 }
