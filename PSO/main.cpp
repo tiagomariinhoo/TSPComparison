@@ -27,19 +27,13 @@ int main(){
             int result = 0;
             int oldPos = 0;
             for(int i = 0; i < pos.size(); ++i){
-                /*for(auto it = adjList[oldPos].begin(); it != adjList[oldPos].end(); it++){
-                    std::cout << *it << " ";
-                }
-                std::cout << " at: " << (int)round(pos[i]) % adjList[oldPos].size() << std::endl;*/
                 if(!visited.insert(oldPos).second) return INT_MAX;
                 int currentPos = adjList[oldPos][(int)round(pos[i]) % adjList[oldPos].size()];
-                //std::cout << oldPos << " -> " << currentPos << std::endl;
                 result += adjListCost[oldPos][(int)round(pos[i]) % adjList[oldPos].size()];
                 oldPos = currentPos;
             }
             if(!visited.insert(oldPos).second) return INT_MAX;
             return result;
-
         }
     );
     std::vector<double> lb(dimensions, 0), ub(dimensions, nodeCount-1);
