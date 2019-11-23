@@ -44,17 +44,19 @@ int main(){
     );
     std::vector<double> lb(dimensions, 0), ub(dimensions, nodeCount-1);
     Particle p = particleSwarm(dimensions, swarmSize, fitness, lb, ub);
-    
-    std::cout << "Chosen Path: ";
-
-    std::vector<int> resultArray;
-    std::vector<double> pos = p.getPos();
-    int oldPos = 0;
-    std::cout << oldPos;
-    for(int i = 0; i < pos.size(); ++i){
-        int currentPos = adjList[oldPos][(int)round(pos[i]) % adjList[oldPos].size()];
-        oldPos = currentPos;
-        std::cout << ", " << oldPos;
+    if(fitness(p.getPos()) != INT_MAX){
+        std::cout << "Chosen Path: ";
+        std::vector<int> resultArray;
+        std::vector<double> pos = p.getPos();
+        int oldPos = 0;
+        std::cout << oldPos;
+        for(int i = 0; i < pos.size(); ++i){
+            int currentPos = adjList[oldPos][(int)round(pos[i]) % adjList[oldPos].size()];
+            oldPos = currentPos;
+            std::cout << ", " << oldPos;
+        }
+        std::cout << std::endl;
+    } else{
+        std::cout << "Satisfying result could not be reached" << std::endl;
     }
-    std::cout << std::endl;
 }
