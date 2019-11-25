@@ -32,7 +32,7 @@ Particle particleSwarm(int dimensions, int swarmSize, Function fitness, std::vec
         }
         swarm.push_back(p);
     }
-    std::cout << "Initial Best Fitness: " << fitness(gBest.getPos()) << std::endl;
+    //std::cout << "Initial Best Fitness: " << fitness(gBest.getPos()) << std::endl;
 
     // Variables used to limit meaningless iterations (stop if gBest didn't change in 3 iterations)
     int didntUpdate = 0;
@@ -50,7 +50,7 @@ Particle particleSwarm(int dimensions, int swarmSize, Function fitness, std::vec
                 if(fitness(p.getPos()) < fitness(gBest.getPos())){
                     gBest = p;
                     updated = true;
-                    std::cout << "Iteration: "  << i+1 << ", Best Fitness: " << fitness(gBest.getPos()) << ", Omega: " << omega(i) << std::endl;
+                    //std::cout << "Iteration: "  << i+1 << ", Best Fitness: " << fitness(gBest.getPos()) << ", Omega: " << omega(i) << std::endl;
                 }
             }
         }
