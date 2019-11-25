@@ -23,7 +23,7 @@ int main(){
     // Setting PSO parameters
     int swarmSize = 5;
     int dimensions = adjList.size()-1;
-    std::vector<double> lb(dimensions, 0), ub(dimensions, nodeCount*3.5);
+    std::vector<double> lb(dimensions, 0), ub(dimensions, nodeCount);
     Function fitness(
         [adjList, adjListCost](std::vector<double> pos) -> double {
             std::set<int> visited;
