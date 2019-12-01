@@ -15,5 +15,5 @@ class Bitmask {
         void printTest();
         void setEdges();
         int getSize();
-        int solverTSP(int mask, int pos);
+        long long solverTSP(long long mask, long long pos);
 };
