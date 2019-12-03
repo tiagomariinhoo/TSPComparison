@@ -59,7 +59,7 @@ int main(){
             std::cout << ", " << oldPos;
         }
         std::cout << std::endl;
-        std::cout << "Path's Fitness: " << fitness(pos) << std::endl;
+        std::cout << "Path's Cost: " << fitness(pos) << std::endl;
     } else{
         std::cout << "Satisfying result could not be reached" << std::endl;
     }

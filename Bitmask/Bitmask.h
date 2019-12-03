@@ -1,19 +1,31 @@
-#include <bits/stdc++.h>
+#ifndef BITMASK_H
+#define BITMASK_H
+
+#include <vector>
 
 class Bitmask {
+    
+    int n;
+    long long dp[(15 << 1)][15];
+    std::vector< std::vector<int> > dist;
+    long long solverTSP(long long mask, long long pos);
+
     public:
-        int n;
-        std::vector< std::vector<int> > dist;
+        int bestPathCost;
+        std::vector<int> bestPath;
 
         /**
-         * Constructors
+         * Constructor
          * @param1 = number of nodes
          * @param2 = Adj list
          */
         Bitmask(int n, std::vector< std::vector<int> > vec);
 
-        void printTest();
         void setEdges();
-        int getSize();
-        long long solverTSP(long long mask, long long pos);
+        void solveTSP();
+        int getSize(){
+            return n;
+        }
 };
+
+#endif

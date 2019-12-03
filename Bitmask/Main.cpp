@@ -1,21 +1,9 @@
-#include <bits/stdc++.h>
 #include "Bitmask.h"
+#include <iostream>
+#include <climits>
+#include <ctime>
 
 using namespace std;
-
-void read(vector<vector<int> > &vec){
-	int n;
-	cin >> n;
-	for(int i=0;i<n;i++){
-		vector<int> aux;
-		for(int j=0;j<n;j++){
-			int a;
-			cin >> a;
-			aux.push_back(a);
-		}
-		vec.push_back(aux);
-	}
-}
 
 /**WINDOWS
  * To compile: g++ -std=c++17 Main.cpp Bitmask.cpp -o main
@@ -24,12 +12,36 @@ void read(vector<vector<int> > &vec){
 
 int main(int argc, char** argv){
 
-	vector< vector<int> > vec;
+	int nodeCount, edgeCount;
+	cin >> nodeCount >> edgeCount;
+	vector<int> aux(nodeCount, INT_MAX);
+	vector< vector<int> > vec(nodeCount, aux);
+	
+	for(int i = 0; i < edgeCount; ++i){
+		int a, b, c;
+		cin >> a >> b >> c;
+		vec[a][b] = c;
+	}
 
-	read(vec);
+	for(int i = 0; i < nodeCount; ++i){
+		vec[i][i] = 0;
+	}	
+
 	Bitmask btm(vec.size(), vec);
 
-	cout << btm.solverTSP(1, 0) << endl;
+	clock_t t = clock();
+	btm.solveTSP();
+	t = clock()-t;
+	
+	std::cout << "Chosen Path: ";
+	string sep = "";
+	for(int i = 0; i < btm.bestPath.size(); ++i){
+		std::cout << sep << btm.bestPath[i];
+		sep = ", ";
+	}
+	std::cout << std::endl;
+	std::cout << "Path's Cost: " << btm.bestPathCost << std::endl;
+	std::cout << t << " Clock cicles (" << ((double)t)/CLOCKS_PER_SEC << " seconds)" << std::endl;
 
 	return 0;
 }
