@@ -7,6 +7,7 @@ class Bitmask {
     
     int n;
     long long dp[(15 << 1)][15];
+    long long parent[(15 << 1)][15];
     std::vector< std::vector<int> > dist;
     long long solverTSP(long long mask, long long pos);
 
@@ -23,6 +24,7 @@ class Bitmask {
 
         void setEdges();
         void solveTSP();
+        void getPath();
         int getSize(){
             return n;
         }

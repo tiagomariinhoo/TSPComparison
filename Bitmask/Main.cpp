@@ -34,11 +34,12 @@ int main(int argc, char** argv){
 	t = clock()-t;
 	
 	std::cout << "Chosen Path: ";
-	string sep = "";
-	for(int i = 0; i < btm.bestPath.size(); ++i){
-		std::cout << sep << btm.bestPath[i];
-		sep = ", ";
-	}
+	btm.getPath();
+	// string sep = "";
+	// for(int i = 0; i < btm.bestPath.size(); ++i){
+	// 	std::cout << sep << btm.bestPath[i];
+	// 	sep = ", ";
+	// }
 	std::cout << std::endl;
 	std::cout << "Path's Cost: " << btm.bestPathCost << std::endl;
 	std::cout << t << " Clock cicles (" << ((double)t)/CLOCKS_PER_SEC << " seconds)" << std::endl;
