@@ -2,6 +2,7 @@
 #define BITMASK_H
 
 #include <vector>
+#include <fstream>
 
 class Bitmask {
     
@@ -24,7 +25,7 @@ class Bitmask {
 
         void setEdges();
         void solveTSP();
-        void getPath();
+        void getPath(std::ofstream &outputFile);
         int getSize(){
             return n;
         }

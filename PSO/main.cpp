@@ -5,6 +5,9 @@
 #include <cmath>
 #include <ctime>
 #include <algorithm>
+#include <fstream>
+
+std::ofstream output("output.json", std::ios_base::trunc);
 
 int main(){
 
@@ -70,30 +73,28 @@ int main(){
         return result;
     };
     
-    //Running and benchmarking PSO
-    clock_t t = clock();
     Particle p = particleSwarm(dimensions, swarmSize, fitness, lb, ub);
-    t = clock()-t;
 
     //Printing the results of PSO
     if(fitness(p.getPos()) != INT_MAX){
-        std::cout << "Chosen Path: ";
+        output << "{" << std::endl;
+        output << "\t\"chosen_path\": [";
         std::vector<int> resultArray;
         std::vector<double> pos = p.getPos();
         int oldPos = bestStartPos;
-        std::cout << oldPos;
+        output << oldPos;
         for(int i = 0; i < pos.size(); ++i){
             int currentPos = adjList[oldPos][(int)round(pos[i]) % adjList[oldPos].size()];
             oldPos = currentPos;
-            std::cout << ", " << oldPos;
+            output << ", " << oldPos;
         }
-        std::cout << ", " << bestStartPos;
-        std::cout << std::endl;
-        std::cout << "Path's Cost: " << fitness(pos) << std::endl;
+        output << ", " << bestStartPos << "]";
+        output << ", " << std::endl;
+        output << "\t\"path_cost\": " << fitness(pos) << std::endl;
+        output << "}" << std::endl;
     } else{
         std::cout << "Satisfying result could not be reached" << std::endl;
     }
 
-    //Printing the benchmarking results
-    std::cout << t << " Clock cicles (" << ((double)t)/CLOCKS_PER_SEC << " seconds)" << std::endl;
+    output.close();
 }

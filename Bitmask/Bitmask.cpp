@@ -18,20 +18,27 @@ void Bitmask::solveTSP(){
     bestPathCost = solverTSP(1, 0);
 }
 
-void Bitmask::getPath(){
+void Bitmask::getPath(std::ofstream &output){
     int path[30];
     int path_counter = 0;
     int cur_node = 0;
     int cur_mask = 1;
+    int flag = 0;
+    int first_node;
     do {
         path[path_counter] = cur_node;
-        if(cur_node < n) std::cout << cur_node << " ";
+        if(cur_node < n) {
+            if(flag) output << ", ";
+            else first_node = cur_node;
+            flag = 1;
+            output << cur_node;
+        }
         else break;
         path_counter++;
         cur_node = parent[cur_mask][cur_node];
         cur_mask = cur_mask | (1 << cur_node);
     } while(cur_node != -1);
-    std::cout << std::endl;
+    output << ", " << first_node;
 }
 
 long long Bitmask::solverTSP(long long mask, long long pos){

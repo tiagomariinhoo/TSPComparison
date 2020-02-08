@@ -2,8 +2,11 @@
 #include <iostream>
 #include <climits>
 #include <ctime>
+#include <fstream>
 
 using namespace std;
+
+ofstream output("output.json", ios_base::trunc);
 
 /**WINDOWS
  * To compile: g++ -std=c++17 Main.cpp Bitmask.cpp -o main
@@ -11,7 +14,6 @@ using namespace std;
  */
 
 int main(int argc, char** argv){
-
 	int nodeCount, edgeCount;
 	cin >> nodeCount >> edgeCount;
 	vector<int> aux(nodeCount, INT_MAX);
@@ -33,16 +35,13 @@ int main(int argc, char** argv){
 	btm.solveTSP();
 	t = clock()-t;
 	
-	std::cout << "Chosen Path: ";
-	btm.getPath();
-	// string sep = "";
-	// for(int i = 0; i < btm.bestPath.size(); ++i){
-	// 	std::cout << sep << btm.bestPath[i];
-	// 	sep = ", ";
-	// }
-	std::cout << std::endl;
-	std::cout << "Path's Cost: " << btm.bestPathCost << std::endl;
-	std::cout << t << " Clock cicles (" << ((double)t)/CLOCKS_PER_SEC << " seconds)" << std::endl;
+	output << "{" << std::endl;
+	output << "\t\"chosen_path\": [";
+	btm.getPath(output);
+	output << "], " << std::endl;
+	output << "\t\"path_cost\": " << btm.bestPathCost << std::endl;
+    output << "}" << std::endl;
+    output.close();
 
 	return 0;
 }
