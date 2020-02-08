@@ -1,14 +1,22 @@
-from os import walk, system, remove, mkdir, chdir, getcwd, startfile
+from os import system, remove, mkdir, chdir, getcwd, startfile, walk
 from json.decoder import JSONDecodeError
+from os.path import exists, join
 import matplotlib.pyplot as plt
-from os.path import exists
 from timeit import timeit
 import networkx as nx
 import subprocess
 import platform
 import json
 
-if not exists("./plots/"):
+if exists("./plots/"):
+  chdir("./plots/")
+  for root, dirs, files in walk(getcwd(), topdown=False):
+    for name in files:
+      remove(join(root, name))
+    for name in dirs:
+      rmdir(join(root, name))
+  chdir("..")
+else:
   mkdir("./plots/")
 
 benchmarks = {}
@@ -50,9 +58,8 @@ def prepare_folder(folder_name, compile_command):
 
 def graph_results(folder_name):
   try:
-    remove("../plots/"+folder_name+"'s Path.png")
     new_graph = graph
-    with open("./output1.json", "r") as file:
+    with open("./output.json", "r") as file:
       result = json.loads(file.read())
 
       for i in range(len(result["chosen_path"])-1):
@@ -68,13 +75,6 @@ def graph_results(folder_name):
     plt.clf()
   except (FileNotFoundError, JSONDecodeError) as e:
     print("  Output JSON file not found (this may have happened because the algorithm didn't find an answer to the problem)")
-
-# chdir("./plots/")
-# for root, dirs, files in os.walk(getcwd(), topdown=False):
-#     for name in files:
-#         os.remove(os.path.join(root, name))
-#     for name in dirs:
-#         os.rmdir(os.path.join(root, name))
 
 default_edges = read_graph("./in.txt")
 graph = nx.DiGraph()
