@@ -1,4 +1,4 @@
-from os import system, remove, mkdir, chdir, getcwd, startfile, walk
+from os import system, remove, mkdir, chdir, getcwd, walk
 from json.decoder import JSONDecodeError
 from os.path import exists, join
 import matplotlib.pyplot as plt
@@ -40,17 +40,22 @@ def read_graph(filepath):
 def prepare_folder(folder_name, compile_command):
   print("Running on folder "+folder_name+": ")
   chdir("./"+folder_name)
-
+  
   print("  Deleting previous output files")
-  if(exists("./output.json")):
+  if exists("./output.json"):
     remove("./output.json")
+  
+  if exists("./main.exe"):
     remove("./main.exe")
   
   print("  Compiling code")
   system(compile_command)
   
   print("  Running executable")
-  benchmarks[folder_name] = timeit(lambda: system(".\\main.exe < ../in.txt"), number=1)*1000
+  if platform.system() == "Windows":
+    benchmarks[folder_name] = timeit(lambda: system(".\\main.exe < ../in.txt"), number=1)*1000
+  else:
+    benchmarks[folder_name] = timeit(lambda: system("./main.exe < ../in.txt"), number=1)*1000
 
   print("  Plotting Graph")
   graph_results(folder_name)
@@ -64,11 +69,12 @@ def graph_results(folder_name):
     with open("./output.json", "r") as file:
       result = json.loads(file.read())
       
+      edges_to_keep = []
       for i in range(len(result["chosen_path"])-1):
         edge = (result["chosen_path"][i], result["chosen_path"][i+1])
-        new_graph[edge[0]][edge[1]]['color'] = 'green'
+        edges_to_keep.append(edge)
       
-      edges_to_remove = [(u, v) for u,v in new_graph.edges() if new_graph[u][v]['color'] == 'black']
+      edges_to_remove = [(u, v) for u,v in new_graph.edges() if (u, v) not in edges_to_keep]
       new_graph.remove_edges_from(edges_to_remove)
       plt.title("Path's cost is "+str(result["path_cost"]))
     
@@ -103,15 +109,18 @@ plt.xlabel("Runtime in miliseconds")
 plt.title("Benchmark")
 plt.savefig("./plots/Benchmark.png")
 plt.clf()
-print()
-print("Please check the plots in the plots folder")
 
 chdir("./plots")
 path = getcwd()
-if platform.system() == "Windows":
-  startfile(path)
-elif platform.system() == "Darwin":
-  subprocess.Popen(["open", path])
-else:
-  subprocess.Popen(["xdg-open", path])
+try:
+  if platform.system() == "Windows":
+    from os import startfile
+    startfile(path)
+  elif platform.system() == "Darwin":
+    subprocess.Popen(["open", path])
+  else:
+    subprocess.Popen(["xdg-open", path])
+except Exception:
+  print()
+  print("Please check the plots in the plots folder")
 chdir("..")

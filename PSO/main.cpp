@@ -7,8 +7,6 @@
 #include <algorithm>
 #include <fstream>
 
-std::ofstream output("output.json", std::ios_base::trunc);
-
 int main(){
 
     //Reading graph from input
@@ -75,6 +73,8 @@ int main(){
     
     Particle p = particleSwarm(dimensions, swarmSize, fitness, lb, ub);
 
+    std::ofstream output("output.json", std::ios_base::trunc);
+    
     //Printing the results of PSO
     if(fitness(p.getPos()) != INT_MAX){
         output << "{" << std::endl;

@@ -6,8 +6,6 @@
 
 using namespace std;
 
-ofstream output("output.json", ios_base::trunc);
-
 /**WINDOWS
  * To compile: g++ -std=c++17 Main.cpp Bitmask.cpp -o main
  * To run: main < in
@@ -31,9 +29,9 @@ int main(int argc, char** argv){
 
 	Bitmask btm(vec.size(), vec);
 
-	clock_t t = clock();
 	btm.solveTSP();
-	t = clock()-t;
+
+	ofstream output("output.json", ios_base::trunc);
 	
 	output << "{" << std::endl;
 	output << "\t\"chosen_path\": [";
