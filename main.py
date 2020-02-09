@@ -3,6 +3,7 @@ from json.decoder import JSONDecodeError
 from os.path import exists, join
 import matplotlib.pyplot as plt
 from timeit import timeit
+from copy import deepcopy
 import networkx as nx
 import subprocess
 import platform
@@ -31,6 +32,7 @@ def read_graph(filepath):
         continue
 
       edge_info = line.rstrip().split()
+      edge_info = [int(edge_info[0]), int(edge_info[1]), float(edge_info[2])]
       edge_info[2] = {'weight': edge_info[2], 'color': 'black'}
       edges.append(tuple(edge_info))
   return edges
@@ -58,28 +60,36 @@ def prepare_folder(folder_name, compile_command):
 
 def graph_results(folder_name):
   try:
-    new_graph = graph
+    new_graph = deepcopy(graph)
     with open("./output.json", "r") as file:
       result = json.loads(file.read())
-
+      
       for i in range(len(result["chosen_path"])-1):
-        edge = (str(result["chosen_path"][i]), str(result["chosen_path"][i+1]))
+        edge = (result["chosen_path"][i], result["chosen_path"][i+1])
         new_graph[edge[0]][edge[1]]['color'] = 'green'
       
       edges_to_remove = [(u, v) for u,v in new_graph.edges() if new_graph[u][v]['color'] == 'black']
       new_graph.remove_edges_from(edges_to_remove)
-
-    nx.draw_shell(new_graph, with_labels=True, edge_color='g')
-    plt.title(folder_name+"'s best path")
+      plt.title("Path's cost is "+str(result["path_cost"]))
+    
+    edge_data = {(u, v): new_graph[u][v]['weight'] for u,v in new_graph.edges()}
+    nx.draw_networkx(new_graph, with_labels=True, edge_color='g', pos=node_positions)
+    nx.draw_networkx_edge_labels(new_graph, node_positions, edge_labels=edge_data)
     plt.savefig("../plots/"+folder_name+"'s Path.png")
     plt.clf()
   except (FileNotFoundError, JSONDecodeError) as e:
-    print("  Output JSON file not found (this may have happened because the algorithm didn't find an answer to the problem)")
+    print("  Invalid output.json file (this may have happened because the algorithm could not find an answer to the problem)")
 
 default_edges = read_graph("./in.txt")
 graph = nx.DiGraph()
 graph.add_edges_from(default_edges)
-nx.draw(graph, with_labels=True)
+
+node_positions = nx.circular_layout(graph)
+edge_data = {(u, v): graph[u][v]['weight'] for u,v in graph.edges()}
+
+nx.draw_networkx(graph, with_labels=True, pos=node_positions)
+nx.draw_networkx_edge_labels(graph, node_positions, edge_labels=edge_data, label_pos=0.2)
+plt.title("Weights are drawn near the edge's destination node")
 plt.savefig("./plots/Default Graph.png")
 plt.clf()
 
