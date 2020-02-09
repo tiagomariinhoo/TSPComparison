@@ -9,6 +9,10 @@ import subprocess
 import platform
 import json
 
+default_sizes = plt.rcParams['figure.figsize']
+plt.rcParams['figure.figsize'] = list(map(lambda x: x*2, default_sizes))
+plt.rcParams['font.size'] = 14
+
 if exists("./plots/"):
   chdir("./plots/")
   for root, dirs, files in walk(getcwd(), topdown=False):
@@ -80,8 +84,8 @@ def graph_results(folder_name):
     
     edge_data = {(u, v): new_graph[u][v]['weight'] for u,v in new_graph.edges()}
     nx.draw_networkx(new_graph, with_labels=True, edge_color='g', pos=node_positions)
-    nx.draw_networkx_edge_labels(new_graph, node_positions, edge_labels=edge_data)
-    plt.savefig("../plots/"+folder_name+"'s Path.png")
+    nx.draw_networkx_edge_labels(new_graph, node_positions, edge_labels=edge_data, label_pos=0.2)
+    plt.savefig("../plots/"+folder_name+"'s Path.png", bbox_inches='tight')
     plt.clf()
   except (FileNotFoundError, JSONDecodeError) as e:
     print("  Invalid output.json file (this may have happened because the algorithm could not find an answer to the problem)")
@@ -96,7 +100,7 @@ edge_data = {(u, v): graph[u][v]['weight'] for u,v in graph.edges()}
 nx.draw_networkx(graph, with_labels=True, pos=node_positions)
 nx.draw_networkx_edge_labels(graph, node_positions, edge_labels=edge_data, label_pos=0.2)
 plt.title("Weights are drawn near the edge's destination node")
-plt.savefig("./plots/Default Graph.png")
+plt.savefig("./plots/Default Graph.png", bbox_inches='tight')
 plt.clf()
 
 prepare_folder("Bitmask", "g++ Main.cpp Bitmask.cpp -o main.exe")
@@ -107,7 +111,7 @@ plt.barh([0, 3], list(benchmarks.values()))
 plt.yticks([0, 3], list(benchmarks.keys()))
 plt.xlabel("Runtime in miliseconds")
 plt.title("Benchmark")
-plt.savefig("./plots/Benchmark.png")
+plt.savefig("./plots/Benchmark.png", bbox_inches='tight')
 plt.clf()
 
 chdir("./plots")
