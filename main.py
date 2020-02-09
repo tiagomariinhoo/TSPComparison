@@ -99,8 +99,8 @@ plt.title("Weights are drawn near the edge's destination node")
 plt.savefig("./plots/Default Graph.png")
 plt.clf()
 
-prepare_folder("PSO", "g++ main.cpp ./random/random_engine.cpp ./particle/particle.cpp -o main.exe")
 prepare_folder("Bitmask", "g++ Main.cpp Bitmask.cpp -o main.exe")
+prepare_folder("PSO", "g++ main.cpp ./random/random_engine.cpp ./particle/particle.cpp -o main.exe")
 
 print("Plotting benchmark results")
 plt.barh([0, 3], list(benchmarks.values()))

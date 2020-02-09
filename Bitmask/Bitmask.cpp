@@ -3,6 +3,7 @@
 #include <climits>
 #include <cstring> //for memset function
 #include <iostream>
+#include <stdlib.h>
 
 Bitmask::Bitmask(int _n, std::vector< std::vector<int> > vec) : n(_n), dist(vec) {
     // for(auto i : dist){
@@ -19,23 +20,22 @@ void Bitmask::solveTSP(){
 }
 
 void Bitmask::getPath(std::ofstream &output){
-    int path[30];
-    int path_counter = 0;
+    std::vector<int> path;
     int cur_node = 0;
     int cur_mask = 1;
     int flag = 0;
     do {
-        path[path_counter] = cur_node;
-        if(cur_node < n) {
+        if(abs(cur_node) < n) {
             if(flag) output << ", ";
             flag = 1;
             output << cur_node;
+            path.push_back(cur_node);
         }
         else break;
-        path_counter++;
         cur_node = parent[cur_mask][cur_node];
         cur_mask = cur_mask | (1 << cur_node);
     } while(cur_node != -1);
+    if(path.size() == n) output << ", " << path[0];
 }
 
 long long Bitmask::solverTSP(long long mask, long long pos){
