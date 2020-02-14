@@ -3,10 +3,15 @@
 This project is meant to compare two solutions of the Travelling Salesman Problem, one using Bitmask, which is the more commonly used solution, and another using the Particle Swarm Algorithm.
 
 ### Running the project
-If you want to execute both PSO and Bitmask and also generate plots, just run `python main.py` in this main folder.
+If you want to execute both PSO and Bitmask and also generate plots you'll need to:
+- Open a terminal in the main folder of this project (by default it is the folder this file is in)
+- Run `pip install -r requirements.txt` to install the needed dependencies 
+  - On linux or mac you might need to use `pip3` instead of `pip`
+- Run `python main.py` to execute the code
+  - On linux or mac you might need to use `python3` instead of `python`
 
 ### Executing only a specific algorithm
-To execute only one of them just go to their folders and check their README files
+To execute only one of them just go to their folders and check their `README.md` files
 
 ### Editing the input graph
 The input can be found and edited in the `in.txt` file. The input works as follows:
