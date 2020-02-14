@@ -10,6 +10,10 @@ If you want to execute both PSO and Bitmask and also generate plots you'll need 
 - Run `python main.py` to execute the code
   - On linux or mac you might need to use `python3` instead of `python`
 
+Note that besides python you'll need a C++ compiler to run the code, as both Bitmask and PSO are implemented in C++.
+
+The default compile commands for PSO and Bitmask use the `g++` command to compile the code, if you're using another C++ compiler, you can change the default compile commands in the `main.py` file at the lines `106` and `107`, but always make sure that the compile output is named `main.exe`
+
 ### Executing only a specific algorithm
 To execute only one of them just go to their folders and check their `README.md` files
 
